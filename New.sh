@@ -16,16 +16,20 @@ measure_latency() {
     local ip=$(echo $ip_port | cut -d: -f1)
     local port=$(echo $ip_port | cut -d: -f2)
     local ping_output=$(ping -c 4 -W 1 $ip | tail -n 2)
-    local latency=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $4}')
+    local latency=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $5}')
     local packet_loss=$(echo "$ping_output" | grep 'loss' | awk -F',' '{print $3}' | awk '{print $1}')
-    local jitter=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $6 - $5}')
+    local jitter=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $7 - $6}')
     if [ -z "$latency" ]; then
         latency="N/A"
         packet_loss="N/A"
         jitter="N/A"
     fi
-    local score=$(echo "scale=2; $latency + $jitter" | bc)
-    printf "%-15s %-10s %-10s %-10s %-10s %-10s\n" "$ip" "$port" "$latency" "$packet_loss" "$jitter" "$score"
+    if command -v bc &> /dev/null; then
+        local score=$(echo "scale=2; $latency + $jitter" | bc)
+    else
+        local score="N/A"
+    fi
+    printf "| %-15s | %-10s | %-10s | %-15s | %-10s | %-10s |\n" "$ip" "$port" "$latency" "$packet_loss" "$jitter" "$score"
 }
 
 measure_latency6() {
@@ -33,26 +37,36 @@ measure_latency6() {
     local ip=$(echo $ip_port | cut -d: -f1)
     local port=$(echo $ip_port | cut -d: -f2)
     local ping_output=$(ping6 -c 4 -W 1 $ip | tail -n 2)
-    local latency=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $4}')
+    local latency=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $5}')
     local packet_loss=$(echo "$ping_output" | grep 'loss' | awk -F',' '{print $3}' | awk '{print $1}')
-    local jitter=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $6 - $5}')
+    local jitter=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $7 - $6}')
     if [ -z "$latency" ]; then
         latency="N/A"
         packet_loss="N/A"
         jitter="N/A"
     fi
-    local score=$(echo "scale=2; $latency + $jitter" | bc)
-    printf "%-45s %-10s %-10s %-10s %-10s %-10s\n" "$ip" "$port" "$latency" "$packet_loss" "$jitter" "$score"
+    if command -v bc &> /dev/null; then
+        local score=$(echo "scale=2; $latency + $jitter" | bc)
+    else
+        local score="N/A"
+    fi
+    printf "| %-45s | %-10s | %-10s | %-15s | %-10s | %-10s |\n" "$ip" "$port" "$latency" "$packet_loss" "$jitter" "$score"
 }
 
 display_ipv4_table() {
-    echo -e "IP                Port       Ping(ms)   Packet Loss(%) Jitter(ms)  Score"
-    echo "$1" | while read ip_port; do measure_latency "$ip_port"; done
+    printf "+-----------------+------------+------------+-----------------+------------+------------+\n"
+    printf "| IP              | Port       | Ping(ms)   | Packet Loss(%)  | Jitter(ms) | Score      |\n"
+    printf "+-----------------+------------+------------+-----------------+------------+------------+\n"
+    echo "$1" | while read -r ip_port; do measure_latency "$ip_port"; done
+    printf "+-----------------+------------+------------+-----------------+------------+------------+\n"
 }
 
 display_ipv6_table() {
-    echo -e "IP                                          Port       Ping(ms)   Packet Loss(%) Jitter(ms)  Score"
-    echo "$1" | while read ip_port; do measure_latency6 "$ip_port"; done
+    printf "+-----------------------------------------------+------------+------------+-----------------+------------+------------+\n"
+    printf "| IP                                            | Port       | Ping(ms)   | Packet Loss(%)  | Jitter(ms) | Score      |\n"
+    printf "+-----------------------------------------------+------------+------------+-----------------+------------+------------+\n"
+    echo "$1" | while read -r ip_port; do measure_latency6 "$ip_port"; done
+    printf "+-----------------------------------------------+------------+------------+-----------------+------------+------------+\n"
 }
 
 if [ "$user_input" -eq 1 ]; then
