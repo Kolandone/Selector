@@ -45,18 +45,26 @@ measure_latency6() {
     printf "%-45s %-10s %-10s %-10s %-10s %-10s\n" "$ip" "$port" "$latency" "$packet_loss" "$jitter" "$score"
 }
 
+display_ipv4_table() {
+    echo -e "IP                Port       Ping(ms)   Packet Loss(%) Jitter(ms)  Score"
+    echo "$1" | while read ip_port; do measure_latency "$ip_port"; done
+}
+
+display_ipv6_table() {
+    echo -e "IP                                          Port       Ping(ms)   Packet Loss(%) Jitter(ms)  Score"
+    echo "$1" | while read ip_port; do measure_latency6 "$ip_port"; done
+}
+
 if [ "$user_input" -eq 1 ]; then
     echo "Fetching IPv4 addresses from install.sh..."
     ip_list=$(echo "1" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+')
     clear
-    echo -e "IP                Port       Ping(ms)   Packet Loss(%) Jitter(ms)  Score"
-    echo "$ip_list" | head -n 10 | while read ip_port; do measure_latency "$ip_port"; done
+    display_ipv4_table "$ip_list"
 elif [ "$user_input" -eq 2 ]; then
     echo "Fetching IPv6 addresses from install.sh..."
     ip_list=$(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)')
     clear
-    echo -e "IP                                          Port       Ping(ms)   Packet Loss(%) Jitter(ms)  Score"
-    echo "$ip_list" | head -n 10 | while read ip_port; do measure_latency6 "$ip_port"; done
+    display_ipv6_table "$ip_list"
 elif [ "$user_input" -eq 3 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
 elif [ "$user_input" -eq 4 ]; then
