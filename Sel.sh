@@ -12,11 +12,17 @@ echo "Enter your choice:"
 read -r user_input
 
 if [ "$user_input" -eq 1 ]; then
-    echo "Fetching IPv4 address from install.sh..."
-    echo "1" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+' | head -n 1
+    echo "Fetching IPv4 addresses from install.sh..."
+    ip_list=$(echo "1" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+')
+    clear
+    echo "Top 10 IPv4 addresses with the lowest delay:"
+    echo "$ip_list" | head -n 10
 elif [ "$user_input" -eq 2 ]; then
-    echo "Fetching IPv6 address from install.sh..."
-    echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)' | head -n 1
+    echo "Fetching IPv6 addresses from install.sh..."
+    ip_list=$(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)')
+    clear
+    echo "Top 10 IPv6 addresses with the lowest delay:"
+    echo "$ip_list" | head -n 10
 elif [ "$user_input" -eq 3 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
 elif [ "$user_input" -eq 4 ]; then
