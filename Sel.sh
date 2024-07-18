@@ -10,6 +10,12 @@ echo -e "2. Hiddify config, After the first use, you can enter the \e[1;32mKOLAN
 echo -n "Enter your choice: "
 read -r user_input
 
+# Check if the input is a valid integer
+if ! [[ "$user_input" =~ ^[0-9]+$ ]]; then
+    echo "Invalid input. Please enter a number."
+    exit 1
+fi
+
 case $user_input in
     1)
         bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
