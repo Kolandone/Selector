@@ -5,7 +5,7 @@ echo -e "\e[1;31mY\e[1;32mO\e[1;33mU\e[1;34mT\e[1;35mU\e[1;36mB\e[1;37mE\e[0m : 
 
 echo "Please choose an option:"
 echo "1. V2ray and MahsaNG wireguard config"
-echo "2. Hiddify config,After the first use, you can enter the \e[1;32mKOLAND command"
+echo -e "2. Hiddify config, After the first use, you can enter the \e[1;32mKOLAND\e[0m command"
 echo "Enter your choice:"
 read -r user_input
 
