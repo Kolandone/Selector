@@ -15,50 +15,32 @@ measure_latency() {
     local ip_port=$1
     local ip=$(echo $ip_port | cut -d: -f1)
     local port=$(echo $ip_port | cut -d: -f2)
-    local ping_output=$(ping -c 4 -W 1 $ip | tail -n 2)
-    local latency=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $5}')
-    local packet_loss=$(echo "$ping_output" | grep 'loss' | awk -F',' '{print $3}' | awk '{print $1}')
-    local jitter=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $7 - $6}')
-    if [ -z "$latency" ]; then
-        latency="N/A"
-        packet_loss="N/A"
-        jitter="N/A"
-    fi
-    local score=$(echo "scale=2; $latency + $jitter" | awk '{printf "%.2f", $1 + $2}')
-    printf "| %-15s | %-10s | %-10s | %-15s | %-10s | %-10s |\n" "$ip" "$port" "$latency" "$packet_loss" "$jitter" "$score"
+    local latency=$(ping -c 4 -W 1 $ip | tail -1 | awk -F '/' '{print $5}')
+    printf "| %-15s | %-10s | %-10s |\n" "$ip" "$port" "$latency"
 }
 
 measure_latency6() {
     local ip_port=$1
     local ip=$(echo $ip_port | cut -d: -f1)
     local port=$(echo $ip_port | cut -d: -f2)
-    local ping_output=$(ping6 -c 4 -W 1 $ip | tail -n 2)
-    local latency=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $5}')
-    local packet_loss=$(echo "$ping_output" | grep 'loss' | awk -F',' '{print $3}' | awk '{print $1}')
-    local jitter=$(echo "$ping_output" | grep 'rtt' | awk -F'/' '{print $7 - $6}')
-    if [ -z "$latency" ]; then
-        latency="N/A"
-        packet_loss="N/A"
-        jitter="N/A"
-    fi
-    local score=$(echo "scale=2; $latency + $jitter" | awk '{printf "%.2f", $1 + $2}')
-    printf "| %-45s | %-10s | %-10s | %-15s | %-10s | %-10s |\n" "$ip" "$port" "$latency" "$packet_loss" "$jitter" "$score"
+    local latency=$(ping6 -c 4 -W 1 $ip | tail -1 | awk -F '/' '{print $5}')
+    printf "| %-45s | %-10s | %-10s |\n" "$ip" "$port" "$latency"
 }
 
 display_ipv4_table() {
-    printf "+-----------------+------------+------------+-----------------+------------+------------+\n"
-    printf "| IP              | Port       | Ping(ms)   | Packet Loss(%)  | Jitter(ms) | Score      |\n"
-    printf "+-----------------+------------+------------+-----------------+------------+------------+\n"
+    printf "+-----------------+------------+------------+\n"
+    printf "| IP              | Port       | Ping(ms)   |\n"
+    printf "+-----------------+------------+------------+\n"
     echo "$1" | while read -r ip_port; do measure_latency "$ip_port"; done
-    printf "+-----------------+------------+------------+-----------------+------------+------------+\n"
+    printf "+-----------------+------------+------------+\n"
 }
 
 display_ipv6_table() {
-    printf "+-----------------------------------------------+------------+------------+-----------------+------------+------------+\n"
-    printf "| IP                                            | Port       | Ping(ms)   | Packet Loss(%)  | Jitter(ms) | Score      |\n"
-    printf "+-----------------------------------------------+------------+------------+-----------------+------------+------------+\n"
+    printf "+-----------------------------------------------+------------+------------+\n"
+    printf "| IP                                            | Port       | Ping(ms)   |\n"
+    printf "+-----------------------------------------------+------------+------------+\n"
     echo "$1" | while read -r ip_port; do measure_latency6 "$ip_port"; done
-    printf "+-----------------------------------------------+------------+------------+-----------------+------------+------------+\n"
+    printf "+-----------------------------------------------+------------+------------+\n"
 }
 
 if [ "$user_input" -eq 1 ]; then
@@ -73,7 +55,7 @@ elif [ "$user_input" -eq 2 ]; then
     display_ipv6_table "$ip_list"
 elif [ "$user_input" -eq 3 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
-elif [ "$user_input" -eq 4]; then
+elif [ "$user_input" -eq 4 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/install.sh)
     KOLAND
 else
