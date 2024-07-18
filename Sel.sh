@@ -11,18 +11,38 @@ echo -e "4. Hiddify config, After the first use, you can enter the \e[1;32mKOLAN
 echo "Enter your choice:" 
 read -r user_input
 
+measure_latency() {
+    local ip_port=$1
+    local ip=$(echo $ip_port | cut -d: -f1)
+    local latency=$(ping -c 1 -W 1 $ip | grep 'time=' | awk -F'time=' '{ print $2 }' | cut -d' ' -f1)
+    if [ -z "$latency" ]; then
+        latency="N/A"
+    fi
+    echo "$ip_port - $latency ms"
+}
+
+measure_latency6() {
+    local ip_port=$1
+    local ip=$(echo $ip_port | cut -d: -f1)
+    local latency=$(ping6 -c 1 -W 1 $ip | grep 'time=' | awk -F'time=' '{ print $2 }' | cut -d' ' -f1)
+    if [ -z "$latency" ]; then
+        latency="N/A"
+    fi
+    echo "$ip_port - $latency ms"
+}
+
 if [ "$user_input" -eq 1 ]; then
     echo "Fetching IPv4 addresses from install.sh..."
     ip_list=$(echo "1" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+')
     clear
-    echo "Top 10 IPv4 addresses with the lowest delay:"
-    echo "$ip_list" | head -n 10
+    echo "Top 10 IPv4 addresses with their latencies:"
+    echo "$ip_list" | head -n 10 | while read ip_port; do measure_latency "$ip_port"; done
 elif [ "$user_input" -eq 2 ]; then
     echo "Fetching IPv6 addresses from install.sh..."
     ip_list=$(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)')
     clear
-    echo "Top 10 IPv6 addresses with the lowest delay:"
-    echo "$ip_list" | head -n 10
+    echo "Top 10 IPv6 addresses with their latencies:"
+    echo "$ip_list" | head -n 10 | while read ip_port; do measure_latency6 "$ip_port"; done
 elif [ "$user_input" -eq 3 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
 elif [ "$user_input" -eq 4 ]; then
