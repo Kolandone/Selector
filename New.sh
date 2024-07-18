@@ -24,11 +24,7 @@ measure_latency() {
         packet_loss="N/A"
         jitter="N/A"
     fi
-    if command -v bc &> /dev/null; then
-        local score=$(echo "scale=2; $latency + $jitter" | bc)
-    else
-        local score="N/A"
-    fi
+    local score=$(echo "scale=2; $latency + $jitter" | awk '{printf "%.2f", $1 + $2}')
     printf "| %-15s | %-10s | %-10s | %-15s | %-10s | %-10s |\n" "$ip" "$port" "$latency" "$packet_loss" "$jitter" "$score"
 }
 
@@ -45,11 +41,7 @@ measure_latency6() {
         packet_loss="N/A"
         jitter="N/A"
     fi
-    if command -v bc &> /dev/null; then
-        local score=$(echo "scale=2; $latency + $jitter" | bc)
-    else
-        local score="N/A"
-    fi
+    local score=$(echo "scale=2; $latency + $jitter" | awk '{printf "%.2f", $1 + $2}')
     printf "| %-45s | %-10s | %-10s | %-15s | %-10s | %-10s |\n" "$ip" "$port" "$latency" "$packet_loss" "$jitter" "$score"
 }
 
@@ -81,7 +73,7 @@ elif [ "$user_input" -eq 2 ]; then
     display_ipv6_table "$ip_list"
 elif [ "$user_input" -eq 3 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
-elif [ "$user_input" -eq 4 ]; then
+elif [ "$user_input" -eq 4]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/install.sh)
     KOLAND
 else
