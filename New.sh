@@ -9,14 +9,14 @@ echo "1. IPv4 scan"
 echo "2. IPv6 scan"
 echo "3. V2ray and MahsaNG wireguard config"
 echo -e "4. Hiddify config, After the first use, you can enter the \e[1;32mKOLAND\e[0m command"
-echo "5. Warp License cloner"
+echo "5. Warp License Cloner"
 echo "Enter your choice:" 
 read -r user_input
 
 measure_latency() {
     local ip_port=$1
-    local ip=$(echo $ip_port | cut -d: -f1)
-    local latency=$(ping -c 1 -W 1 $ip | grep 'time=' | awk -F'time=' '{ print $2 }' | cut -d' ' -f1)
+    local ip=$(echo "$ip_port" | cut -d: -f1)
+    local latency=$(ping -c 1 -W 1 "$ip" | grep 'time=' | awk -F'time=' '{ print $2 }' | cut -d' ' -f1)
     if [ -z "$latency" ]; then
         latency="N/A"
     fi
@@ -25,8 +25,14 @@ measure_latency() {
 
 measure_latency6() {
     local ip_port=$1
-    local ip=$(echo $ip_port | cut -d: -f1)
-    local latency=$(ping6 -c 1 -W 1 $ip | grep 'time=' | awk -F'time=' '{ print $2 }' | cut -d' ' -f1)
+    local ip=$(echo "$ip_port" | cut -d: -f1)
+    local result=$(ping6 -c 1 -W 1 "$ip")
+    local latency=$(echo "$result" | grep 'time=' | awk -F'time=' '{ print $2 }' | cut -d' ' -f1)
+
+    # Debugging output
+    echo "Debug result for $ip_port:"
+    echo "$result"
+
     if [ -z "$latency" ]; then
         latency="N/A"
     fi
@@ -150,18 +156,17 @@ cloner() {
         # Change License
         id=$(jq -r '.id' <warp-config.json)
         token=$(jq -r '.token' <warp-config.json)
-        license="${license}"
 
-        response=$(curl --request PUT "https://api.cloudflareclient.com/v0a${rand}/reg/${id}/account"
-        --silent \
-        --location \
-        --header 'User-Agent: okhttp/3.12.1' \
-        --header "CF-Client-Version: a-6.33-${rand}" \
-        --header 'Content-Type: application/json' \
-        --header "Authorization: Bearer ${token}" \
-        --data '{
-            "license": "'"$license"'"
-        }')
+                response=$(curl --request PUT "https://api.cloudflareclient.com/v0a${rand}/reg/${id}/account" \
+            --silent \
+            --location \
+            --header 'User-Agent: okhttp/3.12.1' \
+            --header "CF-Client-Version: a-6.33-${rand}" \
+            --header 'Content-Type: application/json' \
+            --header "Authorization: Bearer ${token}" \
+            --data '{
+                "license": "'"$license"'"
+            }')
 
         # ___________________________________________
         # Patch Account
@@ -238,25 +243,29 @@ cloner() {
     done
 }
 
-if [ "$user_input" -eq 1 ]; then
-    echo "Fetching IPv4 addresses from install.sh..."
-    ip_list=$(echo "1" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+')
-    clear
-    echo "Top 10 IPv4 addresses with their latencies:"
-    display_table_ipv4 "$ip_list"
-elif [ "$user_input" -eq 2 ]; then
-    echo "Fetching IPv6 addresses from install.sh..."
-    ip_list=$(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)')
-    clear
-    echo "Top 10 IPv6 addresses with their latencies:"
-    display_table_ipv6 "$ip_list"
-elif [ "$user_input" -eq 3 ]; then
-    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
-elif [ "$user_input" -eq 4 ]; then
-    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/install.sh)
-    KOLAND
-elif [ "$user_input" -eq 5 ]; then
-    cloner
-else
-    echo "Invalid input. Please enter 1, 2, 3, 4, or 5."
-fi
+# Execute the chosen option
+case "$user_input" in
+    1)
+        echo "Enter the IPs for IPv4 scan (one per line):"
+        ips=$(cat)
+        display_table_ipv4 "$ips"
+        ;;
+    2)
+        echo "Enter the IPs for IPv6 scan (one per line):"
+        ips=$(cat)
+        display_table_ipv6 "$ips"
+        ;;
+    3)
+        echo "V2ray and MahsaNG wireguard config option not implemented yet."
+        ;;
+    4)
+        echo "Hiddify config option not implemented yet."
+        ;;
+    5)
+        cloner
+        ;;
+    *)
+        echo "Invalid option selected."
+        ;;
+esac
+
