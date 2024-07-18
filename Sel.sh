@@ -7,11 +7,11 @@ echo -e "\e[1;31mY\e[1;32mO\e[1;33mU\e[1;34mT\e[1;35mU\e[1;36mB\e[1;37mE\e[0m : 
 echo "Please choose an option:"
 echo "1. V2ray and MahsaNG wireguard config"
 echo -e "2. Hiddify config, After the first use, you can enter the \e[1;32mKOLAND\e[0m command"
-echo "3. Generate 10 IP addresses with low latency"
+echo "3. Generate 10 IP addresses with low latency and test ping"
 echo "Enter your choice:" 
 read -r user_input
 
-# Function to generate 10 IP addresses with low latency
+# Function to generate 10 IP addresses with low latency and test ping
 endipv4() {
     n=0
     iplist=10
@@ -98,6 +98,25 @@ endipv4() {
     done
     echo "Generated IP addresses:"
     echo "${temp[@]}" | sed -e 's/ /\n/g' | sort -u | head -n 10
+
+    # Test ping and port availability
+    for ip in $(echo "${temp[@]}" | sed -e 's/ /\n/g' | sort -u | head -n 10); do
+        echo "Testing IP: $ip"
+        ping -c 1 $ip &> /dev/null
+        if [ $? -eq 0 ]; then
+            echo "Ping successful for $ip"
+        else
+            echo "Ping failed for $ip"
+        fi
+        for port in 80 443; do
+            timeout 1 bash -c "echo > /dev/tcp/$ip/$port" &> /dev/null
+            if [ $? -eq 0 ]; then
+                echo "Port $port is open on $ip"
+            else
+                echo "Port $port is closed on $ip"
+            fi
+        done
+    done
 }
 
 if [ "$user_input" -eq 1 ]; then
@@ -110,3 +129,4 @@ elif [ "$user_input" -eq 3 ]; then
 else
     echo "Invalid input. Please enter 1, 2, or 3."
 fi
+
