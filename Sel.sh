@@ -11,17 +11,17 @@ echo -e "4. Hiddify config, After the first use, you can enter the \e[1;32mKOLAN
 echo "Enter your choice:" 
 read -r user_input
 
-if [ "$user_choice" == "1" ]; then
+if [ "$user_input" == "1" ]; then
     echo "Fetching IPv4 address from install.sh..."
-    $(echo "1" | https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+' | head -n 1)
-elif [ "$user_choice" == "2" ]; then
+    curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh | bash -s 1 | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+' | head -n 1
+elif [ "$user_input" == "2" ]; then
     echo "Fetching IPv6 address from install.sh..."
-    $(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)' | head -n 1)
+    curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh | bash -s 2 | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)' | head -n 1
 elif [ "$user_input" -eq 3 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
 elif [ "$user_input" -eq 4 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/install.sh)
     KOLAND
 else
-    echo "Invalid input. Please enter 1 , 2 ,3 or 4."
+    echo "Invalid input. Please enter 1, 2, 3, or 4."
 fi
