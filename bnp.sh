@@ -15,23 +15,22 @@ get_credentials() {
 create_worker() {
     local worker_name=$(generate_random_name)
     echo "Creating a new Worker with name: $worker_name"
-    mkdir -p $worker_name
-    cd $worker_name || { echo "Failed to change directory to $worker_name"; exit 1; }
+    mkdir -p "$worker_name"
+    cd "$worker_name" || { echo "Failed to change directory to $worker_name"; exit 1; }
     curl -O https://raw.githubusercontent.com/bia-pain-bache/BPB-Worker-Panel/main/_worker.js
     cat <<EOT > wrangler.toml
 name = "$worker_name"
 type = "javascript"
 account_id = "$CF_ACCOUNT_ID"
 workers_dev = true
-kv_namespaces = []
 EOT
     if ! command -v wrangler &> /dev/null; then
         echo "wrangler command not found. Please install it first."
         exit 1
     fi
-    CF_API_TOKEN=$CF_API_TOKEN CF_ACCOUNT_ID=$CF_ACCOUNT_ID wrangler publish
+    CF_API_TOKEN="$CF_API_TOKEN" wrangler publish
     cd ..
-    echo $worker_name
+    echo "$worker_name"
 }
 
 # Function to create a KV namespace with a random name
@@ -42,33 +41,34 @@ create_kv_namespace() {
         echo "wrangler command not found. Please install it first."
         exit 1
     fi
-    CF_API_TOKEN=$CF_API_TOKEN CF_ACCOUNT_ID=$CF_ACCOUNT_ID wrangler kv:namespace create $kv_name
-    echo $kv_name
+    CF_API_TOKEN="$CF_API_TOKEN" wrangler kv:namespace create "$kv_name" | grep "id" | awk -F '"' '{print $4}'
 }
 
 # Function to bind a KV namespace to a Worker
 bind_kv_namespace() {
     local worker_name=$1
-    local kv_name=$2
-    echo "Binding KV namespace $kv_name to Worker $worker_name with variable name 'bpb'"
-    cd $worker_name || { echo "Failed to change directory to $worker_name"; exit 1; }
+    local kv_id=$2
+    echo "Binding KV namespace $kv_id to Worker $worker_name with variable name 'bpb'"
+    cd "$worker_name" || { echo "Failed to change directory to $worker_name"; exit 1; }
     cat <<EOT >> wrangler.toml
-kv_namespaces = [{ binding = "bpb", id = "$kv_name" }]
+[[kv_namespaces]]
+binding = "bpb"
+id = "$kv_id"
 EOT
     if ! command -v wrangler &> /dev/null; then
         echo "wrangler command not found. Please install it first."
         exit 1
     fi
-    CF_API_TOKEN=$CF_API_TOKEN CF_ACCOUNT_ID=$CF_ACCOUNT_ID wrangler publish
+    CF_API_TOKEN="$CF_API_TOKEN" wrangler publish
     cd ..
 }
 
 # Main script execution
 get_credentials
 worker_name=$(create_worker)
-kv_name=$(create_kv_namespace)
-bind_kv_namespace $worker_name $kv_name
+kv_id=$(create_kv_namespace)
+bind_kv_namespace "$worker_name" "$kv_id"
 
 worker_url="https://${worker_name}.workers.dev/panel"
-echo "Worker $worker_name created and bound to KV namespace $kv_name with variable name 'bpb'."
+echo "Worker $worker_name created and bound to KV namespace with ID $kv_id and variable name 'bpb'."
 echo "You can visit your Worker at: $worker_url"
