@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo "new."
 # Ensure necessary tools are installed
 install_dependencies() {
     pkg update
@@ -34,8 +34,10 @@ create_worker() {
     local worker_name=$(generate_random_name)
     echo "Creating a new Worker with name: $worker_name"
 
+    # Download the worker script
     curl -s -o worker.js https://raw.githubusercontent.com/bia-pain-bache/BPB-Worker-Panel/main/_worker.js
 
+    # Upload the Worker script
     response=$(curl -s -w "%{http_code}" -o /dev/null -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}" \
          -H "Authorization: Bearer ${CF_API_TOKEN}" \
          -H "Content-Type: application/javascript" \
@@ -43,6 +45,7 @@ create_worker() {
 
     if [ "$response" -ne 200 ]; then
         echo "Failed to create the Worker. HTTP Status Code: $response"
+        echo "Check if the worker.js file is valid and the API endpoint is correct."
         exit 1
     fi
 
@@ -64,6 +67,7 @@ create_kv_namespace() {
 
     if [ "$response" -ne 200 ] || [ "$kv_id" == "null" ]; then
         echo "Failed to create KV namespace. HTTP Status Code: $response"
+        echo "Check if the API endpoint and data format are correct."
         exit 1
     fi
 
@@ -95,6 +99,7 @@ bind_kv_namespace() {
 
     if [ "$response" -ne 200 ]; then
         echo "Failed to bind KV namespace. HTTP Status Code: $response"
+        echo "Check the API endpoint and ensure the binding data format is correct."
         exit 1
     fi
 }
