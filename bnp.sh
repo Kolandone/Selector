@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Ensure wrangler is authenticated and configured correctly
+echo "Installing wrangler..."
+npm install -g wrangler
+
+# Authenticate wrangler
+echo "Authenticating wrangler..."
+wrangler login
+
+# Verify wrangler setup
+echo "Verifying wrangler setup..."
+wrangler whoami || { echo "Wrangler authentication failed. Please check your credentials."; exit 1; }
+
 # Function to generate a random name
 generate_random_name() {
     cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 10 | head -n 1
@@ -24,10 +36,6 @@ type = "javascript"
 account_id = "$CF_ACCOUNT_ID"
 workers_dev = true
 EOT
-    if ! command -v wrangler &> /dev/null; then
-        echo "wrangler command not found. Please install it first."
-        exit 1
-    fi
     CF_API_TOKEN="$CF_API_TOKEN" wrangler publish
     cd ..
     echo "$worker_name"
@@ -37,11 +45,8 @@ EOT
 create_kv_namespace() {
     local kv_name=$(generate_random_name)
     echo "Creating KV namespace with name: $kv_name"
-    if ! command -v wrangler &> /dev/null; then
-        echo "wrangler command not found. Please install it first."
-        exit 1
-    fi
-    CF_API_TOKEN="$CF_API_TOKEN" wrangler kv:namespace create "$kv_name" | grep "id" | awk -F '"' '{print $4}'
+    kv_id=$(CF_API_TOKEN="$CF_API_TOKEN" wrangler kv:namespace create "$kv_name" | grep -oP '(?<=id": ")[^"]+')
+    echo "$kv_id"
 }
 
 # Function to bind a KV namespace to a Worker
@@ -55,10 +60,6 @@ bind_kv_namespace() {
 binding = "bpb"
 id = "$kv_id"
 EOT
-    if ! command -v wrangler &> /dev/null; then
-        echo "wrangler command not found. Please install it first."
-        exit 1
-    fi
     CF_API_TOKEN="$CF_API_TOKEN" wrangler publish
     cd ..
 }
