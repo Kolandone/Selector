@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "new."
+
 # Ensure necessary tools are installed
 install_dependencies() {
     pkg update
@@ -45,7 +45,7 @@ create_worker() {
 
     if [ "$response" -ne 200 ]; then
         echo "Failed to create the Worker. HTTP Status Code: $response"
-        echo "Check if the worker.js file is valid and the API endpoint is correct."
+        echo "Check the content of worker.js and ensure it is a valid Cloudflare Worker script."
         exit 1
     fi
 
