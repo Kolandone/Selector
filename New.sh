@@ -26,7 +26,13 @@ measure_latency() {
 measure_latency6() {
     local ip_port=$1
     local ip=$(echo "$ip_port" | cut -d: -f1)
-    local latency=$(ping6 -c 1 -W 1 "$ip" | grep 'time=' | awk -F'time=' '{ print $2 }' | cut -d' ' -f1)
+    local result=$(ping6 -c 1 -W 1 "$ip")
+    local latency=$(echo "$result" | grep 'time=' | awk -F'time=' '{ print $2 }' | cut -d' ' -f1)
+
+    # Debugging output
+    echo "Debug result for $ip_port:"
+    echo "$result"
+
     if [ -z "$latency" ]; then
         latency="N/A"
     fi
@@ -114,7 +120,7 @@ cloner() {
     echo -e "${purple}-------------------------------------${rest}"
     while true; do
         # Requirements
-        if [ $(type -p wg) ]; then
+        if command -v wg &>/dev/null; then
             private_key=$(wg genkey)
             public_key=$(wg pubkey <<<"$private_key")
         else
@@ -145,57 +151,122 @@ cloner() {
             }')
 
         echo "$response" | jq . >warp-config.json
-
         # ___________________________________________
         # Change License
         id=$(jq -r '.id' <warp-config.json)
         token=$(jq -r '.token' <warp-config.json)
-        license="${license}"
 
-                response=$(curl --request PUT "https://api.cloudflareclient.com/v0a${rand}/reg/${id}" \
+        response=$(curl --request PUT "https://api.cloudflareclient.com/v0a${rand}/reg/${id}/account" \
             --silent \
             --location \
-            --tlsv1.3 \
             --header 'User-Agent: okhttp/3.12.1' \
             --header "CF-Client-Version: a-6.33-${rand}" \
             --header 'Content-Type: application/json' \
             --header "Authorization: Bearer ${token}" \
             --data '{
-                "license": "'"${license}"'"
+                "license": "'"$license"'"
             }')
 
-        echo "$response" | jq . >warp-config.json
+        # ___________________________________________
+        # Patch Account
+        patch_one_response=$(curl -X PATCH "https://api.cloudflareclient.com/v0a${rand}/reg/${id}/account" \
+            --silent \
+            --location \
+            --header 'User-Agent: okhttp/3.12.1' \
+            --header "CF-Client-Version: a-6.33-${rand}" \
+            --header 'Content-Type: application/json' \
+            --header "Authorization: Bearer ${token}" \
+            --data '{"active": true}')
 
-        status=$(jq -r '.status' <warp-config.json)
-        if [ "$status" == "success" ]; then
-            echo -e "${green}License updated successfully!${rest}"
-            break
-        else
-            echo -e "${red}Failed to update license. Retrying...${rest}"
+        # ___________________________________________
+        # Get Data
+        get_response=$(curl -X GET "https://api.cloudflareclient.com/v0a${rand}/reg/${id}" \
+            --silent \
+            --header "Authorization: Bearer ${token}" \
+            --header "Accept: application/json" \
+            --header "Accept-Encoding: gzip" \
+            --header "Cf-Client-Version: a-6.3-${rand}" \
+            --header "User-Agent: okhttp/3.12.1" \
+            --output - | gunzip -c | jq .)
+
+        id=$(echo "$get_response" | jq -r '.id')
+        balance=$(echo "$get_response" | jq -r '.account.quota')
+        quota=$((balance / 1000000000))
+
+        # ___________________________________________
+        # Change License Again
+        license=$(jq -r '.account.license' <warp-config.json)
+
+        response=$(curl --request PUT "https://api.cloudflareclient.com/v0a${rand}/reg/${id}/account" \
+            --silent \
+            --location \
+            --header 'User-Agent: okhttp/3.12.1' \
+            --header "CF-Client-Version: a-6.33-${rand}" \
+            --header 'Content-Type: application/json' \
+            --header "Authorization: Bearer ${token}" \
+            --data '{
+                "license": "'"$license"'"
+            }')
+
+        # ___________________________________________
+        # Patch Account Again
+        patch_two_response=$(curl -X PATCH "https://api.cloudflareclient.com/v0a${rand}/reg/${id}/account" \
+            --silent \
+            --location \
+            --header 'User-Agent: okhttp/3.12.1' \
+            --header "CF-Client-Version: a-6.33-${rand}" \
+            --header 'Content-Type: application/json' \
+            --header "Authorization: Bearer ${token}" \
+            --data '{"active": true}' | jq . >/dev/null 2>&1)
+
+        if [ "$(echo "$patch_two_response" | jq '.result')" != "null" ]; then
+            license=$(jq -r '.account.license' <warp-config.json)
+            echo -e "${green}$license ${rest}| ${cyan}$quota${rest}"
+            echo -e "${purple}-------------------------------------${rest}"
+            echo "$license | $quota" >>output.txt
         fi
+
+        # ___________________________________________
+        # Delete Account
+        response=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "https://api.cloudflareclient.com/v0a${rand}/reg/${id}" \
+            --header "Authorization: Bearer ${token}" \
+            --header "Accept: application/json" \
+            --header "Accept-Encoding: gzip" \
+            --header "Cf-Client-Version: a-6.3-${rand}" \
+            --header "User-Agent: okhttp/3.12.1")
+
+        if [ "$response" -ne 204 ]; then
+            echo "Error: HTTP status code $response"
+        fi
+        rm warp-config.json >/dev/null 2>&1
+        sleep 2
     done
 }
 
-if [ "$user_input" -eq 1 ]; then
-    echo "Fetching IPv4 addresses from install.sh..."
-    ip_list=$(echo "1" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+')
-    clear
-    echo "Top 10 IPv4 addresses with their latencies:"
-    display_table_ipv4 "$ip_list"
-elif [ "$user_input" -eq 2 ]; then
-    echo "Fetching IPv6 addresses from install.sh..."
-    ip_list=$(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)')
-    clear
-    echo "Top 10 IPv6 addresses with their latencies:"
-    display_table_ipv6 "$ip_list"
-elif [ "$user_input" -eq 3 ]; then
-    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
-elif [ "$user_input" -eq 4 ]; then
-    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/install.sh)
-    KOLAND
-elif [ "$user_input" -eq 5 ]; then
-    cloner
-else
-    echo "Invalid input. Please enter 1, 2, 3, 4, or 5."
-fi
+# Execute the chosen option
+case "$user_input" in
+    1)
+        echo "Enter the IPs for IPv4 scan (one per line):"
+        ips=$(cat)
+        display_table_ipv4 "$ips"
+        ;;
+    2)
+        echo "Enter the IPs for IPv6 scan (one per line):"
+        ips=$(cat)
+        display_table_ipv6 "$ips"
+        ;;
+    3)
+        echo "V2ray and MahsaNG wireguard config option not implemented yet."
+        ;;
+    4)
+        echo "Hiddify config option not implemented yet."
+        ;;
+    5)
+        cloner
+        ;;
+    *)
+        echo "Invalid option selected."
+        ;;
+esac
 
+       
