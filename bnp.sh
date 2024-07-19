@@ -15,8 +15,8 @@ get_credentials() {
 create_worker() {
     local worker_name=$(generate_random_name)
     echo "Creating a new Worker with name: $worker_name"
-    mkdir $worker_name
-    cd $worker_name
+    mkdir -p $worker_name
+    cd $worker_name || { echo "Failed to change directory to $worker_name"; exit 1; }
     curl -O https://raw.githubusercontent.com/bia-pain-bache/BPB-Worker-Panel/main/_worker.js
     cat <<EOT > wrangler.toml
 name = "$worker_name"
@@ -25,6 +25,10 @@ account_id = "$CF_ACCOUNT_ID"
 workers_dev = true
 kv_namespaces = []
 EOT
+    if ! command -v wrangler &> /dev/null; then
+        echo "wrangler command not found. Please install it first."
+        exit 1
+    fi
     CF_API_TOKEN=$CF_API_TOKEN CF_ACCOUNT_ID=$CF_ACCOUNT_ID wrangler publish
     cd ..
     echo $worker_name
@@ -34,6 +38,10 @@ EOT
 create_kv_namespace() {
     local kv_name=$(generate_random_name)
     echo "Creating KV namespace with name: $kv_name"
+    if ! command -v wrangler &> /dev/null; then
+        echo "wrangler command not found. Please install it first."
+        exit 1
+    fi
     CF_API_TOKEN=$CF_API_TOKEN CF_ACCOUNT_ID=$CF_ACCOUNT_ID wrangler kv:namespace create $kv_name
     echo $kv_name
 }
@@ -43,10 +51,14 @@ bind_kv_namespace() {
     local worker_name=$1
     local kv_name=$2
     echo "Binding KV namespace $kv_name to Worker $worker_name with variable name 'bpb'"
-    cd $worker_name
+    cd $worker_name || { echo "Failed to change directory to $worker_name"; exit 1; }
     cat <<EOT >> wrangler.toml
 kv_namespaces = [{ binding = "bpb", id = "$kv_name" }]
 EOT
+    if ! command -v wrangler &> /dev/null; then
+        echo "wrangler command not found. Please install it first."
+        exit 1
+    fi
     CF_API_TOKEN=$CF_API_TOKEN CF_ACCOUNT_ID=$CF_ACCOUNT_ID wrangler publish
     cd ..
 }
