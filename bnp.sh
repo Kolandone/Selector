@@ -1,16 +1,45 @@
 #!/bin/bash
 
-# Ensure wrangler is authenticated and configured correctly
-echo "Installing wrangler..."
-npm install -g wrangler
+# Ensure necessary tools are installed
+
+# Function to check and install npm
+install_npm() {
+    if ! command -v npm &> /dev/null; then
+        echo "npm not found. Installing npm..."
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            sudo apt update
+            sudo apt install -y nodejs npm
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            brew install node
+        else
+            echo "Unsupported OS. Please install npm manually."
+            exit 1
+        fi
+    else
+        echo "npm is already installed."
+    fi
+}
+
+# Function to check and install wrangler
+install_wrangler() {
+    if ! command -v wrangler &> /dev/null; then
+        echo "wrangler not found. Installing wrangler..."
+        npm install -g wrangler
+    else
+        echo "wrangler is already installed."
+    fi
+}
 
 # Authenticate wrangler
-echo "Authenticating wrangler..."
-wrangler login
-
-# Verify wrangler setup
-echo "Verifying wrangler setup..."
-wrangler whoami || { echo "Wrangler authentication failed. Please check your credentials."; exit 1; }
+authenticate_wrangler() {
+    echo "Authenticating wrangler..."
+    wrangler login
+    echo "Verifying wrangler setup..."
+    if ! wrangler whoami; then
+        echo "Wrangler authentication failed. Please check your credentials."
+        exit 1
+    fi
+}
 
 # Function to generate a random name
 generate_random_name() {
@@ -65,6 +94,9 @@ EOT
 }
 
 # Main script execution
+install_npm
+install_wrangler
+authenticate_wrangler
 get_credentials
 worker_name=$(create_worker)
 kv_id=$(create_kv_namespace)
