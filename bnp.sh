@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Ensure necessary tools are installed
-
+apt-get update && apt-get upgrade
+apt install termux-api
 # Function to check and install npm
 install_npm() {
     if ! command -v npm &> /dev/null; then
         echo "npm not found. Installing npm..."
         if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-            sudo apt update
-            sudo apt install -y nodejs npm
+            apt install -y nodejs npm
         elif [[ "$OSTYPE" == "darwin"* ]]; then
             brew install node
         else
