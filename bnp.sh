@@ -43,20 +43,14 @@ create_worker() {
     # Download the worker script
     curl -s -o worker.js https://raw.githubusercontent.com/bia-pain-bache/BPB-Worker-Panel/main/_worker.js
 
-    # Check if the script contains import statements
-    if grep -q "import" worker.js; then
-        echo "Worker script contains unsupported import statements."
-        exit 1
-    fi
-
-    # Create the Worker
-    curl -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}" \
+    # Upload the Worker script
+    response=$(curl -s -o /dev/null -w "%{http_code}" -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}" \
          -H "Authorization: Bearer ${CF_API_TOKEN}" \
          -H "Content-Type: application/javascript" \
-         --data-binary @worker.js
+         --data-binary @worker.js)
 
-    if [ $? -ne 0 ]; then
-        echo "Failed to create the Worker"
+    if [ "$response" -ne 200 ]; then
+        echo "Failed to create the Worker. HTTP Status Code: $response"
         exit 1
     fi
 
@@ -68,13 +62,16 @@ create_kv_namespace() {
     local kv_name=$(generate_random_name)
     echo "Creating KV namespace with name: $kv_name"
 
-    kv_id=$(curl -X POST "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/storage/kv/namespaces" \
+    response=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/storage/kv/namespaces" \
                  -H "Authorization: Bearer ${CF_API_TOKEN}" \
                  -H "Content-Type: application/json" \
-                 --data "{\"title\":\"${kv_name}\"}" | jq -r '.result.id')
+                 --data "{\"title\":\"${kv_name}\"}")
 
-    if [ $? -ne 0 ] || [ "$kv_id" == "null" ]; then
-        echo "Failed to create KV namespace"
+    kv_id=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/storage/kv/namespaces" \
+                 -H "Authorization: Bearer ${CF_API_TOKEN}" | jq -r --arg kv_name "$kv_name" '.result[] | select(.title == $kv_name) | .id')
+
+    if [ "$response" -ne 200 ] || [ "$kv_id" == "null" ]; then
+        echo "Failed to create KV namespace. HTTP Status Code: $response"
         exit 1
     fi
 
@@ -88,7 +85,6 @@ bind_kv_namespace() {
 
     echo "Binding KV namespace $kv_id to Worker $worker_name with variable name 'bpb'"
 
-    # Create a binding configuration
     bindings=$(jq -n \
         --arg kv_id "$kv_id" \
         '{
@@ -100,14 +96,13 @@ bind_kv_namespace() {
             ]
         }')
 
-    # Upload the binding configuration
-    curl -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}/bindings" \
+    response=$(curl -s -o /dev/null -w "%{http_code}" -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}/bindings" \
          -H "Authorization: Bearer ${CF_API_TOKEN}" \
          -H "Content-Type: application/json" \
-         --data "$bindings"
+         --data "$bindings")
 
-    if [ $? -ne 0 ]; then
-        echo "Failed to bind KV namespace"
+    if [ "$response" -ne 200 ]; then
+        echo "Failed to bind KV namespace. HTTP Status Code: $response"
         exit 1
     fi
 }
