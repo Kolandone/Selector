@@ -12,7 +12,7 @@ install_npm() {
         elif [[ "$OSTYPE" == "darwin"* ]]; then
             brew install node
         else
-            echo "Unsupported OS. Please install npm manually."
+            echo "Unsupported OS. Please install npm manually from https://nodejs.org/"
             exit 1
         fi
     else
