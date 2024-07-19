@@ -1,13 +1,8 @@
 #!/bin/bash
 
 # Ensure necessary tools are installed
-
-# Function to check and install dependencies
 install_dependencies() {
-    # Update package list
     pkg update
-
-    # Install curl if not installed
     if ! command -v curl &> /dev/null; then
         echo "curl not found. Installing curl..."
         pkg install -y curl
@@ -15,7 +10,6 @@ install_dependencies() {
         echo "curl is already installed."
     fi
 
-    # Install jq if not installed
     if ! command -v jq &> /dev/null; then
         echo "jq not found. Installing jq..."
         pkg install -y jq
@@ -24,27 +18,25 @@ install_dependencies() {
     fi
 }
 
-# Function to generate a random name
+# Generate a random name
 generate_random_name() {
     cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 10 | head -n 1
 }
 
-# Function to prompt for API token and account ID
+# Get credentials from user
 get_credentials() {
     read -p "Enter your Cloudflare API token: " CF_API_TOKEN
     read -p "Enter your Cloudflare account ID: " CF_ACCOUNT_ID
 }
 
-# Function to create a new Worker with a random name
+# Create a new Worker
 create_worker() {
     local worker_name=$(generate_random_name)
     echo "Creating a new Worker with name: $worker_name"
 
-    # Download the worker script
     curl -s -o worker.js https://raw.githubusercontent.com/bia-pain-bache/BPB-Worker-Panel/main/_worker.js
 
-    # Upload the Worker script
-    response=$(curl -s -o /dev/null -w "%{http_code}" -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}" \
+    response=$(curl -s -w "%{http_code}" -o /dev/null -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}" \
          -H "Authorization: Bearer ${CF_API_TOKEN}" \
          -H "Content-Type: application/javascript" \
          --data-binary @worker.js)
@@ -57,12 +49,12 @@ create_worker() {
     echo "$worker_name"
 }
 
-# Function to create a KV namespace with a random name
+# Create a KV namespace
 create_kv_namespace() {
     local kv_name=$(generate_random_name)
     echo "Creating KV namespace with name: $kv_name"
 
-    response=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/storage/kv/namespaces" \
+    response=$(curl -s -w "%{http_code}" -o /dev/null -X POST "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/storage/kv/namespaces" \
                  -H "Authorization: Bearer ${CF_API_TOKEN}" \
                  -H "Content-Type: application/json" \
                  --data "{\"title\":\"${kv_name}\"}")
@@ -78,7 +70,7 @@ create_kv_namespace() {
     echo "$kv_id"
 }
 
-# Function to bind a KV namespace to a Worker
+# Bind KV namespace to a Worker
 bind_kv_namespace() {
     local worker_name=$1
     local kv_id=$2
@@ -96,7 +88,7 @@ bind_kv_namespace() {
             ]
         }')
 
-    response=$(curl -s -o /dev/null -w "%{http_code}" -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}/bindings" \
+    response=$(curl -s -w "%{http_code}" -o /dev/null -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}/bindings" \
          -H "Authorization: Bearer ${CF_API_TOKEN}" \
          -H "Content-Type: application/json" \
          --data "$bindings")
