@@ -18,9 +18,10 @@ install_dependencies() {
     fi
 }
 
-# Generate a random name with 9 characters (A-Z, a-z)
+# Generate a random name with 4-8 characters (A-Z, a-z)
 generate_random_name() {
-    cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 9 | head -n 1
+    local length=$((RANDOM % 5 + 4))  # Random length between 4 and 8
+    cat /dev/urandom | tr -dc 'A-Za-z' | fold -w "$length" | head -n 1
 }
 
 # Get credentials from user
