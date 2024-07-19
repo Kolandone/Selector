@@ -2,7 +2,7 @@
 
 # Function to generate a random name
 generate_random_name() {
-    echo $(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 10 | head -n 1)
+    cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 10 | head -n 1
 }
 
 # Function to prompt for API token and account ID
@@ -18,11 +18,13 @@ create_worker() {
     mkdir $worker_name
     cd $worker_name
     curl -O https://raw.githubusercontent.com/bia-pain-bache/BPB-Worker-Panel/main/_worker.js
-    echo "name = \"$worker_name\"" > wrangler.toml
-    echo "type = \"javascript\"" >> wrangler.toml
-    echo "account_id = \"$CF_ACCOUNT_ID\"" >> wrangler.toml
-    echo "workers_dev = true" >> wrangler.toml
-    echo "kv_namespaces = []" >> wrangler.toml
+    cat <<EOT > wrangler.toml
+name = "$worker_name"
+type = "javascript"
+account_id = "$CF_ACCOUNT_ID"
+workers_dev = true
+kv_namespaces = []
+EOT
     CF_API_TOKEN=$CF_API_TOKEN CF_ACCOUNT_ID=$CF_ACCOUNT_ID wrangler publish
     cd ..
     echo $worker_name
@@ -42,7 +44,9 @@ bind_kv_namespace() {
     local kv_name=$2
     echo "Binding KV namespace $kv_name to Worker $worker_name with variable name 'bpb'"
     cd $worker_name
-    echo "kv_namespaces = [{ binding = \"bpb\", id = \"$kv_name\" }]" >> wrangler.toml
+    cat <<EOT >> wrangler.toml
+kv_namespaces = [{ binding = "bpb", id = "$kv_name" }]
+EOT
     CF_API_TOKEN=$CF_API_TOKEN CF_ACCOUNT_ID=$CF_ACCOUNT_ID wrangler publish
     cd ..
 }
