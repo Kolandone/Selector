@@ -35,7 +35,7 @@ create_worker() {
     echo "Creating a new Worker with name: $worker_name"
 
     # Download the worker script
-    curl -s -o worker.js https://raw.githubusercontent.com/bia-pain-bache/BPB-Worker-Panel/main/_worker.js
+    curl -s -o worker.js https://raw.githubusercontent.com/Kolandone/Selector/main/worker.js
 
     # Upload the Worker script
     response=$(curl -s -w "%{http_code}" -o /dev/null -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}" \
