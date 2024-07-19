@@ -154,10 +154,11 @@ cloner() {
 
         # ___________________________________________
         # Change License
-        id=$(jq -r '.id' <warp-config.json)
+                id=$(jq -r '.id' <warp-config.json)
         token=$(jq -r '.token' <warp-config.json)
+        license="${license}"
 
-                response=$(curl --request PUT "https://api.cloudflareclient.com/v0a${rand}/reg/${id}/account" \
+        response=$(curl --request PUT "https://api.cloudflareclient.com/v0a${rand}/reg/${id}/account" \
             --silent \
             --location \
             --header 'User-Agent: okhttp/3.12.1' \
