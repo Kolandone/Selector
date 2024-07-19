@@ -39,13 +39,14 @@ create_worker() {
     curl -s -o worker.js https://raw.githubusercontent.com/Kolandone/Selector/main/worker.js
 
     # Upload the Worker script
-    response=$(curl -s -w "%{http_code}" -o /dev/null -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}" \
+    response=$(curl -s -w "%{http_code}" -o response_body.txt -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}" \
          -H "Authorization: Bearer ${CF_API_TOKEN}" \
          -H "Content-Type: application/javascript" \
          --data-binary @worker.js)
 
     if [ "$response" -ne 200 ]; then
         echo "Failed to create the Worker. HTTP Status Code: $response"
+        echo "Response Body: $(cat response_body.txt)"
         echo "Check the content of worker.js and ensure it is a valid Cloudflare Worker script."
         exit 1
     fi
@@ -58,7 +59,7 @@ create_kv_namespace() {
     local kv_name=$(generate_random_name)
     echo "Creating KV namespace with name: $kv_name"
 
-    response=$(curl -s -w "%{http_code}" -o /dev/null -X POST "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/storage/kv/namespaces" \
+    response=$(curl -s -w "%{http_code}" -o response_body.txt -X POST "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/storage/kv/namespaces" \
                  -H "Authorization: Bearer ${CF_API_TOKEN}" \
                  -H "Content-Type: application/json" \
                  --data "{\"title\":\"${kv_name}\"}")
@@ -68,6 +69,7 @@ create_kv_namespace() {
 
     if [ "$response" -ne 200 ] || [ "$kv_id" == "null" ]; then
         echo "Failed to create KV namespace. HTTP Status Code: $response"
+        echo "Response Body: $(cat response_body.txt)"
         echo "Check if the API endpoint and data format are correct."
         exit 1
     fi
@@ -93,13 +95,14 @@ bind_kv_namespace() {
             ]
         }')
 
-    response=$(curl -s -w "%{http_code}" -o /dev/null -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}/bindings" \
+    response=$(curl -s -w "%{http_code}" -o response_body.txt -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${worker_name}/bindings" \
          -H "Authorization: Bearer ${CF_API_TOKEN}" \
          -H "Content-Type: application/json" \
          --data "$bindings")
 
     if [ "$response" -ne 200 ]; then
         echo "Failed to bind KV namespace. HTTP Status Code: $response"
+        echo "Response Body: $(cat response_body.txt)"
         echo "Check the API endpoint and ensure the binding data format is correct."
         exit 1
     fi
