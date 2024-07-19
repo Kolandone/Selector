@@ -18,9 +18,9 @@ install_dependencies() {
     fi
 }
 
-# Generate a random name
+# Generate a random name with 9 characters (A-Z, a-z)
 generate_random_name() {
-    cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 10 | head -n 1
+    cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 9 | head -n 1
 }
 
 # Get credentials from user
