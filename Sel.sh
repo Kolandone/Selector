@@ -10,6 +10,7 @@ echo "2. IPv6 scan"
 echo "3. V2ray and MahsaNG wireguard config"
 echo -e "4. Hiddify config, After the first use, you can enter the \e[1;32mKOLAND\e[0m command"
 echo "5. Warp License Cloner"
+echo "6. Hiddify config for 2.0 version or higher "
 echo "Enter your choice:" 
 read -r user_input
 
@@ -258,6 +259,9 @@ elif [ "$user_input" -eq 4 ]; then
     KOLAND
 elif [ "$user_input" -eq 5 ]; then
     cloner
+    elif [ "$user_input" -eq 6 ]; then
+    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/inst.sh)
+    KOL
 else
-    echo "Invalid input. Please enter 1, 2, 3, 4, or 5."
+    echo "Invalid input. Please enter 1, 2, 3, 4, 5 or 6."
 fi
