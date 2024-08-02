@@ -25,7 +25,7 @@ measure_latency() {
 
 measure_latency6() {
     local ip_port=$1
-    local ip=$(echo $ip_port | cut -d: -f1)
+    local ip=$(echo $ip_port | cut -d'[' -f2 | cut -d']' -f1)
     local latency=$(ping6 -c 1 -W 1 $ip | grep 'time=' | awk -F'time=' '{ print $2 }' | cut -d' ' -f1)
     if [ -z "$latency" ]; then
         latency="N/A"
