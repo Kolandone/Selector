@@ -33,6 +33,7 @@ measure_latency6() {
     printf "| %-45s | %-10s |\n" "$ip_port" "$latency"
 }
 
+
 display_table_ipv4() {
     printf "+-----------------------+------------+\n"
     printf "| IP:Port               | Latency(ms) |\n"
