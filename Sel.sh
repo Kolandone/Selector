@@ -11,6 +11,7 @@ echo "3. V2ray and MahsaNG wireguard config"
 echo -e "4. Hiddify config, After the first use, you can enter the \e[1;32mKOLAND\e[0m command"
 echo "5. Warp License Cloner"
 echo "6. Hiddify config for 2.0 version or higher "
+echo "7. Install Worker Creator"
 echo "Enter your choice:" 
 read -r user_input
 
@@ -262,6 +263,8 @@ elif [ "$user_input" -eq 5 ]; then
     elif [ "$user_input" -eq 6 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/inst.sh)
     KOL
+ elif [ "$user_input" -eq 7 ]; then
+    bash <(curl -fsSL bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh))
 else
-    echo "Invalid input. Please enter 1, 2, 3, 4, 5 or 6."
+    echo "Invalid input. Please enter between 1 and 7."
 fi
