@@ -264,7 +264,7 @@ elif [ "$user_input" -eq 5 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/inst.sh)
     KOL
  elif [ "$user_input" -eq 7 ]; then
-    bash <(curl -fsSL bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh))
+    bash <(curl -fsSL bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh)
 else
     echo "Invalid input. Please enter between 1 and 7."
 fi
