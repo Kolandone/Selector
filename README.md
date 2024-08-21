@@ -18,7 +18,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/Sel.
 bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
 ```
 ---
-### آموزش کامل گزینه های اسکربپت :
+### آموزش کامل گزینه های اسکربپت 1 تا 6 :
 
 [آموزش کامل گزینه های اسکریپت](https://youtu.be/YWvv-ChtIXQ?si=XYjMQqxWWQfdzVcq)
 ---
