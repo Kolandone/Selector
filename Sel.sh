@@ -266,7 +266,7 @@ elif [ "$user_input" -eq 5 ]; then
     KOL
  elif [ "$user_input" -eq 7 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh)
-    elif [ "$user_input" -eq 7 ]; then
+    elif [ "$user_input" -eq 8 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/run.sh)
 else
     echo "Invalid input. Please enter between 1 and 8."
