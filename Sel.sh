@@ -12,6 +12,7 @@ echo -e "4. Hiddify config, After the first use, you can enter the \e[1;32mKOLAN
 echo "5. Warp License Cloner"
 echo "6. Hiddify config for 2.0 version or higher "
 echo "7. Install Worker Creator"
+echo "8. run Worker Creator(install it first)"
 echo "Enter your choice:" 
 read -r user_input
 
@@ -265,6 +266,8 @@ elif [ "$user_input" -eq 5 ]; then
     KOL
  elif [ "$user_input" -eq 7 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh)
+    elif [ "$user_input" -eq 7 ]; then
+    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/run.sh)
 else
-    echo "Invalid input. Please enter between 1 and 7."
+    echo "Invalid input. Please enter between 1 and 8."
 fi
