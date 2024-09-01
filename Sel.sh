@@ -2,19 +2,28 @@
 clear
 
 # Display the title in multiple colors and big size
-echo -e "\e[1;31mY\e[1;32mO\e[1;33mU\e[1;34mT\e[1;35mU\e[1;36mB\e[1;37mE\e[0m : \e[1;31mK\e[1;32mO\e[1;33mL\e[1;34mA\e[1;35mN\e[1;36mD\e[1;37mO\e[1;31mN\e[1;32mE\e[0m"
 
-echo "Please choose an option:"
-echo "1. IPv4 scan"
-echo "2. IPv6 scan"
-echo "3. V2ray and MahsaNG wireguard config"
-echo -e "4. Hiddify config, After the first use, you can enter the \e[1;32mKOLAND\e[0m command"
-echo "5. Warp License Cloner"
-echo "6. Hiddify config for 2.0 version or higher "
-echo "7. Install Worker Creator"
-echo "8. run Worker Creator(install it first)"
-echo "Enter your choice:" 
+
+echo -e "\e[1;35m*****************************************"
+echo -e "\e[1;35m*\e[0m \e[1;31mY\e[1;32mO\e[1;33mU\e[1;34mT\e[1;35mU\e[1;36mB\e[1;37mE\e[0m : \e[4;34mKOLANDONE\e[0m         \e[1;35m"
+echo -e "\e[1;35m*\e[0m \e[1;31mT\e[1;32mE\e[1;33mL\e[1;34mE\e[1;35mG\e[1;36mR\e[1;37mA\e[1;31mM\e[0m : \e[4;34mKOLANDJS\e[0m         \e[1;35m"
+echo -e "\e[1;35m*\e[0m \e[1;31mG\e[1;32mI\e[1;33mT\e[1;34mH\e[1;35mU\e[1;36mB\e[0m : \e[4;34mhttps://github.com/Kolandone\e[0m \e[1;35m"
+echo -e "\e[1;35m*****************************************"
+echo ""
+
+echo -e "\e[1;32mPlease choose an option:\e[0m"
+echo -e "\e[1;33m1. IPv4 scan\e[0m"
+echo -e "\e[1;33m2. IPv6 scan\e[0m"
+echo -e "\e[1;33m3. V2ray and MahsaNG wireguard config\e[0m"
+echo -e "\e[1;33m4. Hiddify config, After the first use, you can enter the \e[1;32mKOLAND\e[0m command"
+echo -e "\e[1;33m5. Warp License Cloner\e[0m"
+echo -e "\e[1;33m6. Hiddify config for 2.0 version or higher\e[0m"
+echo -e "\e[1;33m7. Install Worker Creator\e[0m"
+echo -e "\e[1;33m8. Run Worker Creator (install it first)\e[0m"
+echo -e "\e[1;32mEnter your choice:\e[0m"
 read -r user_input
+
+
 
 measure_latency() {
     local ip_port=$1
