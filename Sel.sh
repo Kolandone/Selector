@@ -11,18 +11,19 @@ echo -e "\e[1;35m*\e[0m \e[1;31mG\e[1;32mI\e[1;33mT\e[1;34mH\e[1;35mU\e[1;36mB\e
 echo -e "\e[1;35m*****************************************"
 echo ""
 
+echo -e "\e[1;36m*****************************************"
 echo -e "\e[1;32mPlease choose an option:\e[0m"
-echo -e "\e[1;33m1. IPv4 scan\e[0m"
-echo -e "\e[1;33m2. IPv6 scan\e[0m"
-echo -e "\e[1;33m3. V2ray and MahsaNG wireguard config\e[0m"
-echo -e "\e[1;33m4. Hiddify config, After the first use, you can enter the \e[1;32mKOLAND\e[0m command"
-echo -e "\e[1;33m5. Warp License Cloner\e[0m"
-echo -e "\e[1;33m6. Hiddify config for 2.0 version or higher\e[0m"
-echo -e "\e[1;33m7. Install Worker Creator\e[0m"
-echo -e "\e[1;33m8. Run Worker Creator (install it first)\e[0m"
-echo -e "\e[1;32mEnter your choice:\e[0m"
+echo -e "\e[1;36m1. \e[1;33mIPv4 scan\e[0m"
+echo -e "\e[1;36m2. \e[1;33mIPv6 scan\e[0m"
+echo -e "\e[1;36m3. \e[1;33mV2ray and MahsaNG wireguard config\e[0m"
+echo -e "\e[1;36m4. \e[1;33mHiddify config for 1.4.0 - 1.9.0 versions\e[0m"
+echo -e "\e[1;36m5. \e[1;33mWarp License Cloner\e[0m"
+echo -e "\e[1;36m6. \e[1;33mHiddify config for 2.0 version or higher\e[0m"
+echo -e "\e[1;36m7. \e[1;33mInstall Worker Creator\e[0m"
+echo -e "\e[1;36m8. \e[1;33mRun Worker Creator (install it first)\e[0m"
+echo -e "\e[1;36m*****************************************"
+echo -en "\e[1;32mEnter your choice:\e[0m"
 read -r user_input
-
 
 
 measure_latency() {
