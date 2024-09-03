@@ -1,6 +1,6 @@
-##  IP scanner, Hidify and v2ray config, Warp Plus license cloner, cloudflare worker management
+##  IP scanner, Hidify and v2ray config, Warp Plus license cloner, cloudflare worker management,Free subscription link
 
-## اسکنر آیپی و ساخت کانفیگ هیدیفای و v2ray ، کلونر لایسنس وارپ پلاس ، مدیریت ورکرهای کلودفلر
+## اسکنر آیپی و ساخت کانفیگ هیدیفای و v2ray ، کلونر لایسنس وارپ پلاس ، مدیریت ورکرهای کلودفلر ، ساب رایگان
 
 
 
@@ -23,9 +23,12 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/inst
 [آموزش کامل گزینه های اسکریپت](https://youtu.be/YWvv-ChtIXQ?si=XYjMQqxWWQfdzVcq)
 
 ---
-### آموزش کامل گزینه ۷ ، مدیریت ورکر :
+### آموزش کامل گزینه ۷و۸ ، مدیریت ورکر :
 
+[آموزش آپدیت اول](https://youtu.be/nneZfJfOyOY?si=zxnLM6J3voVQ6X9x)
+[آموزش آپدیت دوم](https://youtu.be/NgkxvlKFfLU?si=3jV5bJtJ9c2TeMHE)
 
 ---
+
 ## Credits 
-[Ptech](https://github.com/Ptechgithub)
+[Ptech](https://github.com/Ptechgithub) [HIN VPN from yebekhe](https://github.com/itsyebekhe)
