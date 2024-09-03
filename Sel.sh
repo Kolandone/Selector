@@ -1,7 +1,6 @@
 #!/bin/bash
 clear
 
-# Display the title in multiple colors and big size
 
 
 echo -e "\e[1;35m*****************************************"
@@ -21,6 +20,7 @@ echo -e "\e[1;36m5. \e[1;33mWarp License Cloner\e[0m"
 echo -e "\e[1;36m6. \e[1;33mHiddify config for 2.0 version or higher\e[0m"
 echo -e "\e[1;36m7. \e[1;33mInstall Worker Creator\e[0m"
 echo -e "\e[1;36m8. \e[1;33mRun Worker Creator (install it first)\e[0m"
+echo -e "\e[1;36m9. \e[1;33m Free subscription link (Hin VPN)\e[0m"
 echo -e "\e[1;36m*****************************************"
 echo -en "\e[1;32mEnter your choice:\e[0m"
 read -r user_input
@@ -250,7 +250,7 @@ cloner() {
     done
 }
 
-# Execute the chosen
+
 # Execute the chosen option
 if [ "$user_input" -eq 1 ]; then
     echo "Fetching IPv4 addresses from install.sh..."
@@ -278,6 +278,8 @@ elif [ "$user_input" -eq 5 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh)
     elif [ "$user_input" -eq 8 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/run.sh)
+    elif [ "$user_input" -eq 9 ]; then
+    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/main/run.sh))
 else
-    echo "Invalid input. Please enter between 1 and 8."
+    echo "Invalid input. Please enter between 1 and 9."
 fi
