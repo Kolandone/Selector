@@ -279,7 +279,7 @@ elif [ "$user_input" -eq 5 ]; then
     elif [ "$user_input" -eq 8 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/run.sh)
     elif [ "$user_input" -eq 9 ]; then
-    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/main/run.sh))
+    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/main/run.sh)
 else
     echo "Invalid input. Please enter between 1 and 9."
 fi
