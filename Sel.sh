@@ -11,7 +11,7 @@ echo -e "\e[1;35m*****************************************"
 echo ""
 
 echo -e "\e[1;36m*****************************************"
-echo -e "\e[1;32mPlease choose an option:\e[0m"
+echo -e "\e[1;32mPlease choose an option:(Type install to install selector)\e[0m"
 echo -e "\e[1;36m1. \e[1;33mIPv4 scan\e[0m"
 echo -e "\e[1;36m2. \e[1;33mIPv6 scan\e[0m"
 echo -e "\e[1;36m3. \e[1;33mV2ray and MahsaNG wireguard config\e[0m"
@@ -280,6 +280,8 @@ elif [ "$user_input" -eq 5 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/run.sh)
     elif [ "$user_input" -eq 9 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/main/run.sh)
+    elif [ "$user_input" = "install" ]; then
+    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
 else
     echo "Invalid input. Please enter between 1 and 9."
 fi
