@@ -271,16 +271,16 @@ elif [ "$user_input" -eq 4 ]; then
     KOLAND
 elif [ "$user_input" -eq 5 ]; then
     cloner
-    elif [ "$user_input" -eq 6 ]; then
+elif [ "$user_input" -eq 6 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/inst.sh)
     KOL
- elif [ "$user_input" -eq 7 ]; then
+elif [ "$user_input" -eq 7 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh)
-    elif [ "$user_input" -eq 8 ]; then
+elif [ "$user_input" -eq 8 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/run.sh)
-    elif [ "$user_input" -eq 9 ]; then
+elif [ "$user_input" -eq 9 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/main/run.sh)
-    elif [ "$user_input" = "install" ]; then
+elif [ "$user_input" = "install" ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
 else
     echo "Invalid input. Please enter between 1 and 9."
