@@ -23,6 +23,7 @@ echo -e "\e[1;36m8. \e[1;33mRun Worker Creator (install it first)\e[0m"
 echo -e "\e[1;36m9. \e[1;33m Free subscription link (Hin VPN)\e[0m"
 echo -e "\e[1;36m10. \e[1;33mwireguard config for Hiddify and v2ray\e[0m"
 echo -e "\e[1;36m11. \e[1;33mCLEAN IP scanner\e[0m"
+echo -e "\e[1;36m12. \e[1;33mfastly CLEAN IP scanner\e[0m"
 echo -e "\e[1;36m*****************************************"
 echo -en "\e[1;32mEnter your choice:\e[0m"
 read -r user_input
@@ -286,9 +287,11 @@ elif [ "$user_input" -eq 10 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/wireguard-v2hiddify/main/install.sh)
 elif [ "$user_input" -eq 11 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/cfipscanner/main/ipscan.sh)
+elif [ "$user_input" -eq 12 ]; then
+    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/fastlyipscan/refs/heads/main/ipscan.sh)
 elif [ "$user_input" -eq 99 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
     echo -e "\e[1;32mAfter this, you can run the Selector with \e[1;36mkl \e[1;32mcommand\e[0m"
     else 
-    echo "Invalid input. Please enter between 1 and 11"
+    echo "Invalid input. Please enter between 1 and 12"
 fi
