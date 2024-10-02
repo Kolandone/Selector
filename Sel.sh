@@ -290,7 +290,7 @@ elif [ "$user_input" -eq 11 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/cfipscanner/main/ipscan.sh)
 elif [ "$user_input" -eq 12 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/fastlyipscan/refs/heads/main/ipscan.sh)
-elif [ "$user_input" -eq 12 ]; then
+elif [ "$user_input" -eq 13 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/gcorescanner/refs/heads/main/gcore.sh)
 elif [ "$user_input" -eq 99 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
