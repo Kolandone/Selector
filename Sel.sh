@@ -30,7 +30,7 @@ save_results() {
 
 check_dependencies() {
     echo -e "${green}Checking dependencies...${reset}"
-    local deps=("curl" "jq" "wg" "ping" "ping6")
+    local deps=("curl" "jq" "wg" "ping" "ping6" "figlet")
     for dep in "${deps[@]}"; do
         if command -v "$dep" &>/dev/null; then
             echo -e "${green}$dep: Installed${reset}"
