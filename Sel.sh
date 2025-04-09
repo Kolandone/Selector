@@ -414,6 +414,10 @@ case $user_input in
     16)
         clear
         check_dependencies
+        echo -e "\n${yellow}Press Enter to return to the menu...${reset}"
+        read
+        clear
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/Sel.sh)
         ;;
     17)
         clear
@@ -422,6 +426,10 @@ case $user_input in
         echo -e "${green}Author:${reset} Koland"
         echo -e "${green}Description:${reset} A powerful tool for scanning IPs, managing VPN configs, and more!"
         echo -e "${green}GitHub:${reset} https://github.com/Kolandone"
+        echo -e "\n${yellow}Press Enter to return to the menu...${reset}"
+        read
+        clear
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/Sel.sh)
         ;;
     18)
         echo -e "${green}Goodbye! Thanks for using KOLAND script.${reset}"
@@ -438,5 +446,9 @@ case $user_input in
         ;;
     *)
         echo -e "${red}Invalid input. Please enter a number between 1 and 18, or 99.${reset}"
+        echo -e "\n${yellow}Press Enter to return to the menu...${reset}"
+        read
+        clear
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/Sel.sh)
         ;;
 esac
