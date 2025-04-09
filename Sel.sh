@@ -27,6 +27,7 @@ echo -e "\e[1;36m12. \e[1;33mfastly CLEAN IP scanner\e[0m"
 echo -e "\e[1;36m13. \e[1;33mgcore CLEAN IP scanner\e[0m"
 echo -e "\e[1;36m14. \e[1;33mTelegram Proxy\e[0m"
 echo -e "\e[1;36m15. \e[1;33mSingBox installer(only for serv00)\e[0m"
+echo -e "\e[1;36m16. \e[1;33mUsque installer\e[0m"
 echo -e "\e[1;36m*****************************************"
 echo -en "\e[1;32mEnter your choice:\e[0m"
 read -r user_input
@@ -298,9 +299,11 @@ elif [ "$user_input" -eq 14 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/refs/heads/main/proxy.sh)
 elif [ "$user_input" -eq 15 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/serv00/main/koland-serv00.sh)
+    elif [ "$user_input" -eq 16 ]; then
+    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Usque-Installer/refs/heads/main/usque.sh)
 elif [ "$user_input" -eq 99 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
     echo -e "\e[1;32mAfter this, you can run the Selector with \e[1;36mkl \e[1;32mcommand\e[0m"
     else 
-    echo "Invalid input. Please enter between 1 and 15"
+    echo "Invalid input. Please enter between 1 and 16"
 fi
