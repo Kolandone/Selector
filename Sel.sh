@@ -324,7 +324,7 @@ case $user_input in
     4)
         echo -e "${yellow}Running Hiddify config for 1.4.0 - 1.9.0 versions...${reset}"
         bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/install.sh)
-        
+        KOLAND
         ;;
     5)
         cloner
@@ -332,7 +332,7 @@ case $user_input in
     6)
         echo -e "${yellow}Running Hiddify config for 2.0 version or higher...${reset}"
         bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/inst.sh)
-        
+        KOL
         ;;
     7)
         echo -e "${yellow}Installing Worker Creator...${reset}"
