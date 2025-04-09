@@ -325,7 +325,6 @@ run_option() {
         3)
             echo -e "${yellow}Running V2ray and MahsaNG wireguard config...${reset}"
             bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
-            
             ;;
         4)
             echo -e "${yellow}Running Hiddify config for 1.4.0 - 1.9.0 versions...${reset}"
@@ -448,10 +447,22 @@ run_option() {
 }
 
 
-if [ ! -t 0 ]; then
+is_non_interactive() {
     
-    read -r user_input
-    run_option "$user_input"
+    local input
+    if read -t 0.1 input 2>/dev/null; then
+        
+        echo "$input"
+        return 0  
+    else
+        return 1  
+    fi
+}
+
+
+if non_interactive_input=$(is_non_interactive); then
+    
+    run_option "$non_interactive_input"
 else
     
     while true; do
