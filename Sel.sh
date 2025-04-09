@@ -30,7 +30,7 @@ save_results() {
 
 check_dependencies() {
     echo -e "${green}Checking dependencies...${reset}"
-    local deps=("curl" "jq" "wg" "ping" "ping6")
+    local deps=("curl" "jq" "wg" "ping" "ping6" "figlet")
     for dep in "${deps[@]}"; do
         if command -v "$dep" &>/dev/null; then
             echo -e "${green}$dep: Installed${reset}"
@@ -135,7 +135,7 @@ cloner() {
         license="$input_license"
     fi
     echo -e "${cyan}######################${reset}"
-    echo -e "${purple}🔥 Warp License Cloner 🔥${reset}"
+    echo -e "${purple}ðŸ”¥ Warp License Cloner ðŸ”¥${reset}"
     echo -e "${green}Starting...${reset}"
     echo -e "${purple}-------------------------------------${reset}"
 
@@ -248,227 +248,195 @@ cloner() {
     echo -e "${green}Warp License Cloning completed!${reset}"
 }
 
-# تابع برای نمایش منو و گرفتن ورودی
-show_menu() {
-    clear
-    if command -v figlet &>/dev/null; then
-        figlet -f slant "KOLAND"
-    fi
-    echo -e "${cyan}*****************************************${reset}"
-    echo -e "${cyan}*${reset} ${red}Y${green}O${yellow}U${purple}T${cyan}U${green}B${white}E${reset} : ${purple}KOLANDONE${reset}         ${cyan}"
-    echo -e "${cyan}*${reset} ${red}T${green}E${yellow}L${purple}E${cyan}G${green}R${white}A${red}M${reset} : ${purple}KOLANDJS${reset}         ${cyan}"
-    echo -e "${cyan}*${reset} ${red}G${green}I${yellow}T${purple}H${cyan}U${green}B${reset} : ${purple}https://github.com/Kolandone${reset} ${cyan}"
-    echo -e "${cyan}*****************************************${reset}"
-    echo -e "${cyan}* ${green}Date:${reset} $(date '+%Y-%m-%d %H:%M:%S') ${cyan}*${reset}"
-    echo ""
 
-    echo -e "${cyan}+----+---------------------------------------------+${reset}"
-    echo -e "${green}| No | Option                                      |${reset}"
-    echo -e "${cyan}+----+---------------------------------------------+${reset}"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "1" "IPv4 scan"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "2" "IPv6 scan"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "3" "V2ray and MahsaNG wireguard config"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "4" "Hiddify config for 1.4.0 - 1.9.0 versions"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "5" "Warp License Cloner"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "6" "Hiddify config for 2.0 version or higher"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "7" "Install Worker Creator"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "8" "Run Worker Creator (install it first)"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "9" "Free subscription link (Soroush Mirzaei)"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "10" "Wireguard config for Hiddify and v2ray"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "11" "CLEAN IP scanner"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "12" "Fastly CLEAN IP scanner"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "13" "Gcore CLEAN IP scanner"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "14" "Telegram Proxy"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "15" "SingBox installer (only for serv00)"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "16" "Check Dependencies"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "17" "About"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "18" "Exit"
-    printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "99" "Install Selector"
-    echo -e "${cyan}+----+---------------------------------------------+${reset}"
-    echo -en "${green}Enter your choice: ${reset}"
-    read -r user_input
-    echo "$user_input"
-}
-
-# تابع برای اجرای گزینه‌ها
-run_option() {
-    local user_input="$1"
-    case $user_input in
-        1)
-            echo -e "${yellow}Fetching IPv4 addresses...${reset}"
-            loading_animation
-            ip_list=$(echo "1" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) 2>/dev/null | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+')
-            if [ -z "$ip_list" ]; then
-                echo -e "${red}Failed to fetch IPv4 addresses. Check your internet connection or the script.${reset}"
-            else
-                clear
-                echo "Top 10 IPv4 addresses with their latencies:"
-                display_table_ipv4 "$ip_list"
-                save_results "$ip_list" "ipv4_scan_$(date '+%Y%m%d_%H%M%S').txt"
-                echo -e "${green}IPv4 scan completed successfully!${reset}"
-            fi
-            ;;
-        2)
-            echo -e "${yellow}Fetching IPv6 addresses...${reset}"
-            loading_animation
-            ip_list=$(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) 2>/dev/null | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)')
-            if [ -z "$ip_list" ]; then
-                echo -e "${red}Failed to fetch IPv6 addresses. Check your internet connection or the script.${reset}"
-            else
-                clear
-                echo "Top 10 IPv6 addresses with their latencies:"
-                display_table_ipv6 "$ip_list"
-                save_results "$ip_list" "ipv6_scan_$(date '+%Y%m%d_%H%M%S').txt"
-                echo -e "${green}IPv6 scan completed successfully!${reset}"
-            fi
-            ;;
-        3)
-            echo -e "${yellow}Running V2ray and MahsaNG wireguard config...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
-            ;;
-        4)
-            echo -e "${yellow}Running Hiddify config for 1.4.0 - 1.9.0 versions...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/install.sh)
-            KOLAND
-            ;;
-        5)
-            cloner
-            ;;
-        6)
-            echo -e "${yellow}Running Hiddify config for 2.0 version or higher...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/inst.sh)
-            KOL
-            ;;
-        7)
-            echo -e "${yellow}Installing Worker Creator...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh)
-            if [ $? -eq 0 ]; then
-                echo -e "${green}Worker Creator installed successfully!${reset}"
-            else
-                echo -e "${red}Error: Failed to install Worker Creator.${reset}"
-            fi
-            ;;
-        8)
-            echo -e "${yellow}Running Worker Creator...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/run.sh)
-            if [ $? -eq 0 ]; then
-                echo -e "${green}Worker Creator run successfully!${reset}"
-            else
-                echo -e "${red}Error: Failed to run Worker Creator.${reset}"
-            fi
-            ;;
-        9)
-            echo -e "${yellow}Fetching free subscription link...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/main/run.sh)
-            if [ $? -eq 0 ]; then
-                echo -e "${green}Free subscription link retrieved successfully!${reset}"
-            else
-                echo -e "${red}Error: Failed to retrieve free subscription link.${reset}"
-            fi
-            ;;
-        10)
-            echo -e "${yellow}Running Wireguard config for Hiddify and v2ray...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/wireguard-v2hiddify/main/install.sh)
-            ;;
-        11)
-            echo -e "${yellow}Running CLEAN IP scanner...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/cfipscanner/main/ipscan.sh)
-            if [ $? -eq 0 ]; then
-                echo -e "${green}CLEAN IP scanner completed!${reset}"
-            else
-                echo -e "${red}Error: Failed to complete CLEAN IP scanner.${reset}"
-            fi
-            ;;
-        12)
-            echo -e "${yellow}Running Fastly CLEAN IP scanner...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/fastlyipscan/refs/heads/main/ipscan.sh)
-            if [ $? -eq 0 ]; then
-                echo -e "${green}Fastly CLEAN IP scanner completed!${reset}"
-            else
-                echo -e "${red}Error: Failed to complete Fastly CLEAN IP scanner.${reset}"
-            fi
-            ;;
-        13)
-            echo -e "${yellow}Running Gcore CLEAN IP scanner...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/gcorescanner/refs/heads/main/gcore.sh)
-            if [ $? -eq 0 ]; then
-                echo -e "${green}Gcore CLEAN IP scanner completed!${reset}"
-            else
-                echo -e "${red}Error: Failed to complete Gcore CLEAN IP scanner.${reset}"
-            fi
-            ;;
-        14)
-            echo -e "${yellow}Setting up Telegram Proxy...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/refs/heads/main/proxy.sh)
-            if [ $? -eq 0 ]; then
-                echo -e "${green}Telegram Proxy setup completed!${reset}"
-            else
-                echo -e "${red}Error: Failed to setup Telegram Proxy.${reset}"
-            fi
-            ;;
-        15)
-            echo -e "${yellow}Running SingBox installer for serv00...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/serv00/main/koland-serv00.sh)
-            if [ $? -eq 0 ]; then
-                echo -e "${green}SingBox installer for serv00 completed!${reset}"
-            else
-                echo -e "${red}Error: Failed to complete SingBox installer for serv00.${reset}"
-            fi
-            ;;
-        16)
-            clear
-            check_dependencies
-            ;;
-        17)
-            clear
-            echo -e "${purple}=== About KOLAN Script ===${reset}"
-            echo -e "${green}Version:${reset} 2.1.0"
-            echo -e "${green}Author:${reset} Koland"
-            echo -e "${green}Description:${reset} A powerful tool for scanning IPs, managing VPN configs, and more!"
-            echo -e "${green}GitHub:${reset} https://github.com/Kolandone"
-            ;;
-        18)
-            echo -e "${green}Goodbye! Thanks for using KOLAND script.${reset}"
-            exit 0
-            ;;
-        99)
-            echo -e "${yellow}Installing Selector...${reset}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
-            if [ $? -eq 0 ]; then
-                echo -e "${green}After this, you can run the Selector with ${cyan}kl ${green}command${reset}"
-            else
-                echo -e "${red}Error: Failed to install Selector.${reset}"
-            fi
-            ;;
-        *)
-            echo -e "${red}Invalid input. Please enter a number between 1 and 18, or 99.${reset}"
-            ;;
-    esac
-}
-
-
-is_non_interactive() {
-    
-    local input
-    if read -t 0.1 input 2>/dev/null; then
-        
-        echo "$input"
-        return 0  
-    else
-        return 1  
-    fi
-}
-
-
-if non_interactive_input=$(is_non_interactive); then
-    
-    run_option "$non_interactive_input"
-else
-    
-    while true; do
-        user_input=$(show_menu)
-        run_option "$user_input"
-        echo -e "\n${yellow}Press Enter to return to the menu...${reset}"
-        read
-    done
+clear
+if command -v figlet &>/dev/null; then
+    figlet -f slant "KOLAND"
 fi
+echo -e "${cyan}*****************************************${reset}"
+echo -e "${cyan}*${reset} ${red}Y${green}O${yellow}U${purple}T${cyan}U${green}B${white}E${reset} : ${purple}KOLANDONE${reset}         ${cyan}"
+echo -e "${cyan}*${reset} ${red}T${green}E${yellow}L${purple}E${cyan}G${green}R${white}A${red}M${reset} : ${purple}KOLANDJS${reset}         ${cyan}"
+echo -e "${cyan}*${reset} ${red}G${green}I${yellow}T${purple}H${cyan}U${green}B${reset} : ${purple}https://github.com/Kolandone${reset} ${cyan}"
+echo -e "${cyan}*****************************************${reset}"
+echo -e "${cyan}* ${green}Date:${reset} $(date '+%Y-%m-%d %H:%M:%S') ${cyan}*${reset}"
+echo ""
+
+echo -e "${cyan}+----+---------------------------------------------+${reset}"
+echo -e "${green}| No | Option                                      |${reset}"
+echo -e "${cyan}+----+---------------------------------------------+${reset}"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "1" "IPv4 scan"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "2" "IPv6 scan"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "3" "V2ray and MahsaNG wireguard config"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "4" "Hiddify config for 1.4.0 - 1.9.0 versions"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "5" "Warp License Cloner"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "6" "Hiddify config for 2.0 version or higher"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "7" "Install Worker Creator"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "8" "Run Worker Creator (install it first)"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "9" "Free subscription link (Soroush Mirzaei)"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "10" "Wireguard config for Hiddify and v2ray"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "11" "CLEAN IP scanner"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "12" "Fastly CLEAN IP scanner"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "13" "Gcore CLEAN IP scanner"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "14" "Telegram Proxy"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "15" "SingBox installer (only for serv00)"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "16" "Check Dependencies"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "17" "About"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "18" "Exit"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "99" "Install Selector"
+echo -e "${cyan}+----+---------------------------------------------+${reset}"
+echo -en "${green}Enter your choice: ${reset}"
+read -r user_input
+
+case $user_input in
+    1)
+        echo -e "${yellow}Fetching IPv4 addresses...${reset}"
+        loading_animation
+        ip_list=$(echo "1" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) 2>/dev/null | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+')
+        if [ -z "$ip_list" ]; then
+            echo -e "${red}Failed to fetch IPv4 addresses. Check your internet connection or the script.${reset}"
+        else
+            clear
+            echo "Top 10 IPv4 addresses with their latencies:"
+            display_table_ipv4 "$ip_list"
+            save_results "$ip_list" "ipv4_scan_$(date '+%Y%m%d_%H%M%S').txt"
+            echo -e "${green}IPv4 scan completed successfully!${reset}"
+        fi
+        ;;
+    2)
+        echo -e "${yellow}Fetching IPv6 addresses...${reset}"
+        loading_animation
+        ip_list=$(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh) 2>/dev/null | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)')
+        if [ -z "$ip_list" ]; then
+            echo -e "${red}Failed to fetch IPv6 addresses. Check your internet connection or the script.${reset}"
+        else
+            clear
+            echo "Top 10 IPv6 addresses with their latencies:"
+            display_table_ipv6 "$ip_list"
+            save_results "$ip_list" "ipv6_scan_$(date '+%Y%m%d_%H%M%S').txt"
+            echo -e "${green}IPv6 scan completed successfully!${reset}"
+        fi
+        ;;
+    3)
+        echo -e "${yellow}Running V2ray and MahsaNG wireguard config...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/koland.sh)
+        
+        ;;
+    4)
+        echo -e "${yellow}Running Hiddify config for 1.4.0 - 1.9.0 versions...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/install.sh)
+        KOLAND
+        ;;
+    5)
+        cloner
+        ;;
+    6)
+        echo -e "${yellow}Running Hiddify config for 2.0 version or higher...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/inst.sh)
+        KOL
+        ;;
+    7)
+        echo -e "${yellow}Installing Worker Creator...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh)
+        if [ $? -eq 0 ]; then
+            echo -e "${green}Worker Creator installed successfully!${reset}"
+        else
+            echo -e "${red}Error: Failed to install Worker Creator.${reset}"
+        fi
+        ;;
+    8)
+        echo -e "${yellow}Running Worker Creator...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/run.sh)
+        if [ $? -eq 0 ]; then
+            echo -e "${green}Worker Creator run successfully!${reset}"
+        else
+            echo -e "${red}Error: Failed to run Worker Creator.${reset}"
+        fi
+        ;;
+    9)
+        echo -e "${yellow}Fetching free subscription link...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/main/run.sh)
+        if [ $? -eq 0 ]; then
+            echo -e "${green}Free subscription link retrieved successfully!${reset}"
+        else
+            echo -e "${red}Error: Failed to retrieve free subscription link.${reset}"
+        fi
+        ;;
+    10)
+        echo -e "${yellow}Running Wireguard config for Hiddify and v2ray...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/wireguard-v2hiddify/main/install.sh)
+        
+        ;;
+    11)
+        echo -e "${yellow}Running CLEAN IP scanner...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/cfipscanner/main/ipscan.sh)
+        if [ $? -eq 0 ]; then
+            echo -e "${green}CLEAN IP scanner completed!${reset}"
+        else
+            echo -e "${red}Error: Failed to complete CLEAN IP scanner.${reset}"
+        fi
+        ;;
+    12)
+        echo -e "${yellow}Running Fastly CLEAN IP scanner...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/fastlyipscan/refs/heads/main/ipscan.sh)
+        if [ $? -eq 0 ]; then
+            echo -e "${green}Fastly CLEAN IP scanner completed!${reset}"
+        else
+            echo -e "${red}Error: Failed to complete Fastly CLEAN IP scanner.${reset}"
+        fi
+        ;;
+    13)
+        echo -e "${yellow}Running Gcore CLEAN IP scanner...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/gcorescanner/refs/heads/main/gcore.sh)
+        if [ $? -eq 0 ]; then
+            echo -e "${green}Gcore CLEAN IP scanner completed!${reset}"
+        else
+            echo -e "${red}Error: Failed to complete Gcore CLEAN IP scanner.${reset}"
+        fi
+        ;;
+    14)
+        echo -e "${yellow}Setting up Telegram Proxy...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/refs/heads/main/proxy.sh)
+        if [ $? -eq 0 ]; then
+            echo -e "${green}Telegram Proxy setup completed!${reset}"
+        else
+            echo -e "${red}Error: Failed to setup Telegram Proxy.${reset}"
+        fi
+        ;;
+    15)
+        echo -e "${yellow}Running SingBox installer for serv00...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/serv00/main/koland-serv00.sh)
+        if [ $? -eq 0 ]; then
+            echo -e "${green}SingBox installer for serv00 completed!${reset}"
+        else
+            echo -e "${red}Error: Failed to complete SingBox installer for serv00.${reset}"
+        fi
+        ;;
+    16)
+        clear
+        check_dependencies
+        ;;
+    17)
+        clear
+        echo -e "${purple}=== About KOLAN Script ===${reset}"
+        echo -e "${green}Version:${reset} 2.1.0"
+        echo -e "${green}Author:${reset} Koland"
+        echo -e "${green}Description:${reset} A powerful tool for scanning IPs, managing VPN configs, and more!"
+        echo -e "${green}GitHub:${reset} https://github.com/Kolandone"
+        ;;
+    18)
+        echo -e "${green}Goodbye! Thanks for using KOLAND script.${reset}"
+        exit 0
+        ;;
+    99)
+        echo -e "${yellow}Installing Selector...${reset}"
+        bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
+        if [ $? -eq 0 ]; then
+            echo -e "${green}After this, you can run the Selector with ${cyan}kl ${green}command${reset}"
+        else
+            echo -e "${red}Error: Failed to install Selector.${reset}"
+        fi
+        ;;
+    *)
+        echo -e "${red}Invalid input. Please enter a number between 1 and 18, or 99.${reset}"
+        ;;
+esac
