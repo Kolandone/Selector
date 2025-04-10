@@ -299,7 +299,7 @@ elif [ "$user_input" -eq 14 ]; then
 elif [ "$user_input" -eq 15 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/serv00/main/koland-serv00.sh)
 elif [ "$user_input" -eq 16 ]; then
-    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Usque-Installer/refs/heads/main/usque.sh)
+    source <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Usque-Installer/refs/heads/main/usque.sh)
 elif [ "$user_input" -eq 99 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
     echo -e "${green}After this, you can run the Selector with ${cyan}kl ${green}command${reset}"
