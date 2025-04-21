@@ -31,4 +31,4 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/inst
 ---
 
 ## Credits 
-[Ptech](https://github.com/Ptechgithub) [HIN VPN from yebekhe](https://github.com/itsyebekhe)
+[Ptech](https://github.com/Ptechgithub) [soroush mirzaei](https://github.com/soroushmirzaei)
