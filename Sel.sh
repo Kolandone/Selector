@@ -16,7 +16,7 @@ if command -v figlet &>/dev/null; then
 fi
 echo -e "${cyan}*****************************************${reset}"
 echo -e "${cyan}*${reset} ${red}Y${green}O${yellow}U${purple}T${cyan}U${green}B${white}E${reset} : ${purple}KOLANDONE${reset}         ${cyan}"
-echo -e "${cyan}*${reset} ${red}T${green}E${yellow}L${purple}E${cyan}G${green}R${white}A${red}M${reset} : ${purple}NEW TELEGRAM CHANNEL:KOLANDJS1${reset}         ${cyan}"
+echo -e "${cyan}*${reset} ${red}T${green}E${yellow}L${purple}E${cyan}G${green}R${white}A${red}M${reset} : ${red}NEW TELEGRAM CHANNEL:KOLANDJS1${reset}         ${cyan}"
 echo -e "${cyan}*${reset} ${red}G${green}I${yellow}T${purple}H${cyan}U${green}B${reset} : ${purple}https://github.com/Kolandone${reset} ${cyan}"
 echo -e "${cyan}*****************************************${reset}"
 echo -e "${cyan}* ${green}Date:${reset} $(date '+%Y-%m-%d %H:%M:%S') ${cyan}*${reset}"
