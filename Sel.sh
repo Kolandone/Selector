@@ -41,6 +41,7 @@ printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "13" "Gcore C
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "14" "Telegram Proxy"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "15" "SingBox installer (only for serv00)"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "16" "Usque installer"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "17" "Akamai ip scanner"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "99" "Install Selector"
 echo -e "${cyan}+----+---------------------------------------------+${reset}"
 echo -en "${green}Enter your choice: ${reset}"
@@ -300,9 +301,12 @@ elif [ "$user_input" -eq 15 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/serv00/main/koland-serv00.sh)
 elif [ "$user_input" -eq 16 ]; then
     source <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Usque-Installer/refs/heads/main/usque.sh)
+elif [ "$user_input" -eq 17 ]; then
+    source <(curl -fsSL https://raw.githubusercontent.com/Kolandone/cfipscanner/refs/heads/main/Akamai_ipscan.sh)
+    
 elif [ "$user_input" -eq 99 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
     echo -e "${green}After this, you can run the Selector with ${cyan}kl ${green}command${reset}"
 else 
-    echo "Invalid input. Please enter between 1 and 16 or 99"
+    echo "Invalid input. Please enter between 1 and 17 or 99"
 fi
