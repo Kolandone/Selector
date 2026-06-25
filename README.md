@@ -18,4 +18,4 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/Sel.
 [آموزش کامل گزینه های اسکریپت](https://youtu.be/YWvv-ChtIXQ?si=XYjMQqxWWQfdzVcq)
 
 ## Credits 
-[Ptech](https://github.com/Ptechgithub) [soroush mirzaei](https://github.com/soroushmirzaei)
+[Ptech](https://github.com/Ptechgithub) [bia-pain-bache](https://github.com/bia-pain-bache)
