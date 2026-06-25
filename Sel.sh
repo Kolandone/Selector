@@ -31,17 +31,16 @@ printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "3" "V2ray an
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "4" "Hiddify config for 1.4.0 - 1.9.0 versions"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "5" "Warp License Cloner"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "6" "Hiddify config for 2.0 version or higher"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "7" "Install Worker Creator"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "8" "Run Worker Creator (install it first)"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "9" "Free subscription link"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "10" "Wireguard config for Hiddify and v2ray"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "11" "CLEAN IP scanner"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "12" "Fastly CLEAN IP scanner"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "13" "Gcore CLEAN IP scanner"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "14" "Telegram Proxy"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "15" "SingBox installer (only for serv00)"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "16" "Usque installer"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "17" "Akamai ip scanner"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "7" "CF Worker Wizard"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "8" "Free subscription link"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "9" "Wireguard config for Hiddify and v2ray"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "10" "CLEAN IP scanner"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "11" "Fastly CLEAN IP scanner"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "12" "Gcore CLEAN IP scanner"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "13" "Telegram Proxy"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "14" "SingBox installer (only for serv00)"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "15" "Usque installer"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "16" "Akamai ip scanner"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "99" "Install Selector"
 echo -e "${cyan}+----+---------------------------------------------+${reset}"
 echo -en "${green}Enter your choice: ${reset}"
@@ -282,31 +281,29 @@ elif [ "$user_input" -eq 6 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Hidify/main/inst.sh)
     KOL
 elif [ "$user_input" -eq 7 ]; then
-    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/install.sh)
+    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/wcv2/refs/heads/main/install.sh)
 elif [ "$user_input" -eq 8 ]; then
-    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/workercreator/main/run.sh)
-elif [ "$user_input" -eq 9 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/main/run.sh)
-elif [ "$user_input" -eq 10 ]; then
+elif [ "$user_input" -eq 9 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/wireguard-v2hiddify/main/install.sh)
-elif [ "$user_input" -eq 11 ]; then
+elif [ "$user_input" -eq 10 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/cfipscanner/main/ipscan.sh)
-elif [ "$user_input" -eq 12 ]; then
+elif [ "$user_input" -eq 11 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/fastlyipscan/refs/heads/main/ipscan.sh)
-elif [ "$user_input" -eq 13 ]; then
+elif [ "$user_input" -eq 12 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/gcorescanner/refs/heads/main/gcore.sh)
-elif [ "$user_input" -eq 14 ]; then
+elif [ "$user_input" -eq 13 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/refs/heads/main/proxy.sh)
-elif [ "$user_input" -eq 15 ]; then
+elif [ "$user_input" -eq 14 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/serv00/main/koland-serv00.sh)
-elif [ "$user_input" -eq 16 ]; then
+elif [ "$user_input" -eq 15 ]; then
     source <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Usque-Installer/refs/heads/main/usque.sh)
-elif [ "$user_input" -eq 17 ]; then
+elif [ "$user_input" -eq 16 ]; then
     source <(curl -fsSL https://raw.githubusercontent.com/Kolandone/cfipscanner/refs/heads/main/Akamai_ipscan.sh)
     
 elif [ "$user_input" -eq 99 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Selector/main/install.sh)
     echo -e "${green}After this, you can run the Selector with ${cyan}kl ${green}command${reset}"
 else 
-    echo "Invalid input. Please enter between 1 and 17 or 99"
+    echo "Invalid input. Please enter between 1 and 16 or 99"
 fi
