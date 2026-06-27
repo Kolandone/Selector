@@ -37,7 +37,7 @@ printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "9" "Wireguar
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "10" "CLEAN IP scanner"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "11" "Fastly CLEAN IP scanner"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "12" "Gcore CLEAN IP scanner"
-printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "13" "Telegram Proxy"
+printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "13" "Telegram Proxy Finder v2"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "14" "SingBox installer (only for serv00)"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "15" "Usque installer"
 printf "${cyan}| ${yellow}%-2s ${cyan}| ${yellow}%-43s ${cyan}|\n" "16" "Akamai ip scanner"
@@ -293,7 +293,7 @@ elif [ "$user_input" -eq 11 ]; then
 elif [ "$user_input" -eq 12 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/gcorescanner/refs/heads/main/gcore.sh)
 elif [ "$user_input" -eq 13 ]; then
-    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/quick-sub/refs/heads/main/proxy.sh)
+    bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/Tproxy_finderV2/refs/heads/main/TpV2.sh)
 elif [ "$user_input" -eq 14 ]; then
     bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/serv00/main/koland-serv00.sh)
 elif [ "$user_input" -eq 15 ]; then
